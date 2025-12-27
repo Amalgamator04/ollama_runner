@@ -17,7 +17,7 @@ class OllamaClient:
         }
 
         try:
-            res = requests.post(url, json=payload, timeout=300)
+            res = requests.post(url, json=payload, timeout=1000)
             res.raise_for_status()
             return res.json()["response"]
         except Exception as e:
