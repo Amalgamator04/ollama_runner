@@ -108,6 +108,30 @@ print("Generated response:")
 print(result)
 ```
 
+### Getting Embeddings
+
+Generate embeddings for text using embedding models (useful for semantic search, similarity matching, etc.):
+
+```python
+from ollama_runner import OllamaClient
+
+client = OllamaClient()
+
+# Get embeddings for text
+embeddings = client.get_embeddings(
+    model="granite-embedding:30m",
+    prompt="This is the text I want to embed"
+)
+
+print(f"Embedding vector (length: {len(embeddings)}):")
+print(embeddings[:10])  # Print first 10 dimensions
+```
+
+**Note**: Make sure you have an embedding model installed. You can pull one using:
+```bash
+ollama pull granite-embedding:30m
+```
+
 ## API Reference
 
 ### `OllamaClient`
@@ -128,6 +152,17 @@ Generate text using the specified model.
 - `prompt`: The input prompt for text generation
 - Returns: The generated text response as a string
 - Raises: `OllamaError` if the request fails
+
+#### `get_embeddings(model: str, prompt: str) -> list`
+
+Get embeddings for the input text using an embedding model.
+
+- `model`: The name of the embedding model to use (e.g., `"granite-embedding:30m"`)
+- `prompt`: The input text to generate embeddings for
+- Returns: A list of floats representing the embedding vector
+- Raises: `OllamaError` if the request fails
+
+**Note**: Embedding models require input text. Make sure to provide text in the `prompt` parameter.
 
 ### `list_models(base_url: str = "http://localhost:11434") -> list`
 
