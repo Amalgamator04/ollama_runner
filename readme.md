@@ -132,6 +132,47 @@ print(embeddings[:10])  # Print first 10 dimensions
 ollama pull granite-embedding:30m
 ```
 
+### Function Selection with decide_tool
+
+Use Ollama's function calling capabilities to let the model decide which tool to use:
+
+```python
+from ollama_runner import OllamaClient
+
+# Define your Python functions/tools
+def get_text(query: str) -> str:
+    """Return a text response for the given query."""
+    return f"Response to: {query}"
+
+def get_embed(text: str) -> list[float]:
+    """Return an embedding vector for the given text."""
+    # This would typically call your embedding service
+    return [0.1, 0.2, 0.3]
+
+# Initialize client
+client = OllamaClient()
+
+# Prepare messages
+messages = [
+    {"role": "user", "content": "Generate a short blog-style text about AI agents."}
+]
+
+# Use decide_tool with your functions
+tools = [get_text, get_embed]
+response = client.decide_tool(
+    model="functiongemma",
+    messages=messages,
+    tools=tools
+)
+
+print(response)
+```
+
+**Note**: You'll need a function-calling model like `functiongemma`. Install it using:
+```bash
+ollama pull functiongemma
+```
+
 ## API Reference
 
 ### `OllamaClient`
@@ -163,6 +204,18 @@ Get embeddings for the input text using an embedding model.
 - Raises: `OllamaError` if the request fails
 
 **Note**: Embedding models require input text. Make sure to provide text in the `prompt` parameter.
+
+#### `decide_tool(model: str, messages: List[Dict[str, str]], tools: List[Callable]) -> Dict[str, Any]`
+
+Use Ollama to decide which tool to use based on conversation messages. This enables function calling capabilities.
+
+- `model`: The name of the model to use (e.g., `"functiongemma"`)
+- `messages`: A list of message dictionaries with `"role"` and `"content"` keys
+- `tools`: A list of Python functions that will be automatically converted to tool schemas
+- Returns: A dictionary containing the response from Ollama, including tool calls if any
+- Raises: `OllamaError` if the request fails
+
+**Note**: This method automatically extracts function names, descriptions (from docstrings), and parameters (from type hints) from your Python functions and converts them to Ollama's tool schema format.
 
 ### `list_models(base_url: str = "http://localhost:11434") -> list`
 
