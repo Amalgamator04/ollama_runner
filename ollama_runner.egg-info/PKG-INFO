@@ -1,8 +1,8 @@
 Metadata-Version: 2.4
 Name: ollama-runner
-Version: 0.1.0
+Version: 0.1.1
 Summary: Lightweight Python client for running local Ollama models
-Author: Your Name
+Author: Prabhav Sharma
 Requires-Python: >=3.9
 License-File: LICENSE
 Requires-Dist: requests
