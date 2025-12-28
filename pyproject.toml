@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ollama-runner"
-version = "0.1.0"
+version = "0.1.2"
 description = "Lightweight Python client for running local Ollama models"
 authors = [{ name="Prabhav Sharma" }]
 dependencies = ["requests"]
