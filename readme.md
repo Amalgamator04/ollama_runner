@@ -137,7 +137,7 @@ ollama pull granite-embedding:30m
 Use Ollama's function calling capabilities to let the model decide which tool to use:
 
 ```python
-from ollama_runner import OllamaClient
+from ollama_runner import OllamaClient, list_function_names
 
 # Define your Python functions/tools
 def get_text(query: str) -> str:
@@ -152,13 +152,16 @@ def get_embed(text: str) -> list[float]:
 # Initialize client
 client = OllamaClient()
 
+# List available function names
+tools = [get_text, get_embed]
+print("Available functions:", list_function_names(tools))
+
 # Prepare messages
 messages = [
     {"role": "user", "content": "Generate a short blog-style text about AI agents."}
 ]
 
 # Use decide_tool with your functions
-tools = [get_text, get_embed]
 response = client.decide_tool(
     model="functiongemma",
     messages=messages,
